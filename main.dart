@@ -3,28 +3,45 @@ import 'dart:io';
 
 void main() {
   ToDoList toDoList = ToDoList();
-
+  print('To view command options print h');
   while (true) {
-    if (toDoList.myTasks.isNotEmpty) {
-      print('1 - ADD TASK, 2 - REMOVE TASK, 3 - VIEW MY TASKS, 4 - EXIT');
-    } else {
-      print('1 - ADD TASK, 4 - EXIT');
-    }
+    Map<int, String> commandOptions = {
+      1: "Add new task",
+      2: "Delete task",
+      3: "View my tasks",
+      4: "Exit",
+    };
 
     String? typed = stdin.readLineSync();
     switch (typed) {
+      case 'h':
+        print(commandOptions);
+        print('Type the command');
+        continue;
       case '1':
+        print('Type task you would like to do');
         String? task = stdin.readLineSync();
         toDoList.addTask(task);
       case '2':
-        print('WHICH TASK WOULD YOU LIKE TO DELETE?');
-        toDoList.viewTasks();
-        int index = int.parse(stdin.readLineSync()!);
-        toDoList.removeTask(index);
+        if (toDoList.myTasks.isEmpty) {
+          toDoList.viewTasks();
+          continue;
+        } else {
+          print('Which task would you like to delete?');
+          toDoList.viewTasks();
+          int index = int.parse(stdin.readLineSync()!);
+          toDoList.removeTask(index);
+        }
       case '3':
-        toDoList.viewTasks();
+        if (toDoList.myTasks.isEmpty) {
+          toDoList.viewTasks();
+        } else {
+          print('Your tasks');
+          toDoList.viewTasks();
+        }
+
       case '4':
-        exit;
+        return;
     }
   }
 }
